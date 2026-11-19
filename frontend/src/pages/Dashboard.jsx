@@ -12,7 +12,7 @@ export default function Dashboard() {
   const { businesses, totals, upcoming } = data
   return (
     <div className="fade-up space-y-6">
-      <div><h1 className="text-2xl font-bold">Boshqaruv paneli</h1><p className="text-sm text-slate-500">Barcha bizneslar va tarmoqlar bo'yicha qisqacha holat</p></div>
+      <div><h1 className="text-[1.7rem] font-bold">Boshqaruv paneli</h1><p className="text-sm text-slate-500">Barcha bizneslar va tarmoqlar bo'yicha qisqacha holat</p></div>
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
         <Stat icon={Users} label="Jami obunachilar" value={fmtNum(totals.followers)} tone="brand" />
         <Stat icon={CalendarClock} label="Bugungi postlar" value={totals.today} tone="sky" />
@@ -25,15 +25,15 @@ export default function Dashboard() {
         <div className="grid gap-5 lg:grid-cols-3">
           <div className="grid content-start gap-4 sm:grid-cols-2 lg:col-span-2">
             {businesses.map((b) => (
-              <Link key={b.id} to={`/b/${b.slug}`} className="card group p-5 transition hover:-translate-y-0.5 hover:shadow-lg">
+              <Link key={b.id} to={`/b/${b.slug}`} className="card card-hover hov group p-5">
                 <div className="flex items-start gap-3">
-                  <Avatar name={b.name} size={44} />
+                  <Avatar name={b.name} size={48} live={b.pending > 0} />
                   <div className="min-w-0 flex-1"><div className="truncate font-semibold group-hover:text-brand-700">{b.name}</div><div className="truncate text-xs text-slate-500">{b.industry || '—'}</div></div>
                   <div className="flex gap-1">{b.platforms.map((p, i) => <PlatformBadge key={i} platform={p} size={22} />)}</div>
                 </div>
                 <div className="mt-4 grid grid-cols-3 gap-2 text-center">
                   {[[fmtNum(b.followers), 'obunachi'], [b.published, "e'lon qilingan"], [b.today, 'bugun']].map(([v, l]) => (
-                    <div key={l} className="rounded-xl bg-slate-50 py-2"><div className="text-lg font-bold">{v}</div><div className="text-[11px] text-slate-500">{l}</div></div>
+                    <div key={l} className="rounded-xl bg-slate-50/80 py-2"><div className="font-display text-lg font-bold">{v}</div><div className="text-[11px] text-slate-500">{l}</div></div>
                   ))}
                 </div>
                 <div className="mt-3 flex flex-wrap gap-1.5">

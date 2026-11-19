@@ -6,6 +6,7 @@ import { PickerBody, Thumb } from '../components/Library'
 import { api, del, get, post, put } from '../lib/api'
 import { Badge, Button, Card, ErrorBox, Field, Input, Modal, PlatformBadge, Select, Spinner, StatusBadge, Textarea, useToast, cx } from '../components/ui'
 import { KIND, PLATFORM, fmtDate, toLocalInput } from '../lib/meta'
+import { celebrate } from '../lib/fx'
 
 const LIMITS = { telegram: 4096, instagram: 2200, youtube: 5000, facebook: 63206, tiktok: 2200, linkedin: 3000 }
 
@@ -51,7 +52,7 @@ export default function PostEditor() {
   const refresh = (p) => { qc.setQueryData(['post', id], { post: p }); qc.invalidateQueries({ queryKey: ['posts', slug] }); qc.invalidateQueries({ queryKey: ['overview', slug] }); qc.invalidateQueries({ queryKey: ['businesses'] }) }
   const run = async (name, fn, okMsg) => {
     setBusy(name)
-    try { const r = await fn(); if (r?.post) refresh(r.post); const m = okMsg || r?.message; if (m) toast.success(m); return r } catch (e) { toast.error(e.message); if (e.data?.post) refresh(e.data.post) } finally { setBusy('') }
+    try { const r = await fn(); if (r?.post) refresh(r.post); const m = okMsg || r?.message; if (m) toast.success(m); if (r && (name === 'approve' || name === 'publish_now')) celebrate(); return r } catch (e) { toast.error(e.message); if (e.data?.post) refresh(e.data.post) } finally { setBusy('') }
   }
   const save = () => run('save', async () => { const r = await put(`/api/posts/${id}/`, payload()); setDirty(false); return r }, 'Saqlandi')
   const action = (a, msg) => run(a, async () => { if (dirty && !locked) await put(`/api/posts/${id}/`, payload()); return post(`/api/posts/${id}/${a}/`) }, msg)

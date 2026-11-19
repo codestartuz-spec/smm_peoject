@@ -29,7 +29,7 @@ function AiCard({ c, allPrios, send }) {
           <p className="mt-0.5 text-xs text-slate-500">{c.price}</p>
         </div>
         <div className="text-right text-xs">
-          {c.is_set ? <span className="inline-flex items-center gap-1 text-emerald-600"><CheckCircle2 size={13} />Kalit bor</span> : <span className="text-slate-400">Kalit yo'q</span>}
+          {c.is_set ? <span className="inline-flex items-center gap-2 text-emerald-600"><span className="pulse-dot" />Kalit bor</span> : <span className="text-slate-400">Kalit yo'q</span>}
         </div>
       </div>
 
@@ -104,7 +104,7 @@ function GroupCard({ g, redirectUri, send }) {
             <Badge className={g.badge === 'Majburiy' ? 'bg-slate-100 text-slate-700' : 'bg-emerald-50 text-emerald-700'}>{g.badge}</Badge></div>
           <p className="mt-1 text-sm text-slate-600">{g.intro}</p>
         </div>
-        <div className="shrink-0 text-xs">{g.ready ? <span className="inline-flex items-center gap-1 text-emerald-600"><CheckCircle2 size={13} />Sozlangan</span> : <span className="text-amber-600">Sozlanmagan</span>}</div>
+        <div className="shrink-0 text-xs">{g.ready ? <span className="inline-flex items-center gap-2 text-emerald-600"><span className="pulse-dot" />Sozlangan</span> : <span className="text-amber-600">Sozlanmagan</span>}</div>
       </div>
 
       {g.redirect && (

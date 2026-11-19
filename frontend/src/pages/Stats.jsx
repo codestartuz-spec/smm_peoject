@@ -45,9 +45,9 @@ export default function Stats() {
       <div className="grid gap-5 lg:grid-cols-2">
         <Card className="p-5"><h2 className="mb-3 font-semibold">Jami obunachilar</h2>
           {d.total_series.length < 2 ? <p className="py-12 text-center text-sm text-slate-400">Grafik uchun kamida 2 kunlik ma'lumot kerak (har 3 soatda avtomatik yig'iladi)</p> : (
-            <ResponsiveContainer width="100%" height={260}><AreaChart data={d.total_series}><defs><linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#6366f1" stopOpacity={0.35} /><stop offset="100%" stopColor="#6366f1" stopOpacity={0} /></linearGradient></defs>
+            <ResponsiveContainer width="100%" height={260}><AreaChart data={d.total_series}><defs><linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#7657ff" stopOpacity={0.35} /><stop offset="100%" stopColor="#7657ff" stopOpacity={0} /></linearGradient></defs>
               <CartesianGrid strokeDasharray="3 3" stroke="#eef1f6" /><XAxis dataKey="date" tickFormatter={dshort} fontSize={12} /><YAxis fontSize={12} width={45} domain={['auto', 'auto']} /><Tooltip labelFormatter={dshort} />
-              <Area type="monotone" dataKey="followers" name="Obunachi" stroke="#6366f1" strokeWidth={2.5} fill="url(#g)" /></AreaChart></ResponsiveContainer>)}
+              <Area type="monotone" dataKey="followers" name="Obunachi" stroke="#7657ff" strokeWidth={2.5} fill="url(#g)" /></AreaChart></ResponsiveContainer>)}
         </Card>
         <Card className="p-5"><h2 className="mb-3 font-semibold">Kanallar bo'yicha o'sish</h2>
           {multi.length < 2 ? <p className="py-12 text-center text-sm text-slate-400">Ma'lumot yetarli emas</p> : (

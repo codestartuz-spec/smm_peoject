@@ -44,7 +44,7 @@ export default function Channels() {
               <div className="flex items-center gap-3"><PlatformBadge platform={c.platform} size={36} />
                 <div className="min-w-0 flex-1"><div className="truncate font-semibold">{c.name}</div><div className="truncate text-xs text-slate-500">{PLATFORM[c.platform]?.label} · ID: {c.external_id || '—'}</div></div>
                 <div className="text-right"><div className="text-lg font-bold">{fmtNum(c.followers)}</div><div className="text-[11px] text-slate-500">obunachi</div></div></div>
-              <div className="mt-2 text-xs">{c.last_error ? <span className="flex gap-1.5 text-red-600"><AlertTriangle size={13} className="mt-0.5 shrink-0" />{c.last_error.slice(0, 200)}</span> : c.has_credentials ? <span className="flex items-center gap-1 text-emerald-600"><CheckCircle2 size={13} />Kalit kiritilgan</span> : <span className="text-amber-600">Kalit kiritilmagan</span>}</div>
+              <div className="mt-2 text-xs">{c.last_error ? <span className="flex gap-1.5 text-red-600"><AlertTriangle size={13} className="mt-0.5 shrink-0" />{c.last_error.slice(0, 200)}</span> : c.has_credentials ? <span className="flex items-center gap-2 text-emerald-600"><span className="pulse-dot" />Ulangan: kalit kiritilgan</span> : <span className="text-amber-600">Kalit kiritilmagan</span>}</div>
               <div className="mt-3 flex flex-wrap gap-2">
                 <Button size="sm" variant="secondary" icon={Zap} loading={test.isPending && test.variables === c.id} onClick={() => test.mutate(c.id)}>Tekshirish</Button>
                 {c.platform === 'youtube' && <a href={`/oauth/google/start/${c.id}/`}><Button size="sm" icon={ExternalLink} className="!bg-red-600 hover:!bg-red-700">Google bilan ulash</Button></a>}

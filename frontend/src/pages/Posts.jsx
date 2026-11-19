@@ -22,11 +22,11 @@ export default function Posts() {
     <div className="fade-up space-y-4">
       <div className="flex flex-wrap items-center gap-2">
         <div className="relative min-w-52 flex-1 sm:max-w-xs"><Search size={15} className="absolute left-3 top-3 text-slate-400" /><Input className="pl-9" placeholder="Qidirish…" value={q} onChange={(e) => setQ(e.target.value)} /></div>
-        <Select className="w-auto" value={kind} onChange={(e) => setKind(e.target.value)}><option value="">Barcha formatlar</option>{Object.entries(KIND).map(([k, v]) => <option key={k} value={k}>{v.label}</option>)}</Select>
+        <Select className="!w-auto" value={kind} onChange={(e) => setKind(e.target.value)}><option value="">Barcha formatlar</option>{Object.entries(KIND).map(([k, v]) => <option key={k} value={k}>{v.label}</option>)}</Select>
         <Button className="ml-auto" icon={Plus} loading={create.isPending} onClick={() => create.mutate()}>Yangi post</Button>
       </div>
       <div className="flex flex-wrap gap-1.5">
-        <button onClick={() => setStatus('')} className={cx('rounded-full px-3 py-1 text-sm', !status ? 'bg-brand-600 text-white' : 'bg-white text-slate-600 border border-slate-200')}>Hammasi {total}</button>
+        <button onClick={() => setStatus('')} className={cx('rounded-full px-3 py-1 text-sm', !status ? 'bg-brand-600 text-white shadow-md shadow-brand-600/25' : 'bg-white/80 text-slate-600 border border-slate-200 hover:border-brand-200')}>Hammasi {total}</button>
         {Object.entries(STATUS).map(([k, v]) => (
           <button key={k} onClick={() => setStatus(k)} className={cx('rounded-full px-3 py-1 text-sm', status === k ? 'bg-brand-600 text-white' : 'bg-white text-slate-600 border border-slate-200')}>{v.label} {counts[k] || 0}</button>
         ))}

@@ -2,6 +2,7 @@ import { Navigate, Route, Routes } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
 import { get } from './lib/api'
 import { Spinner } from './components/ui'
+import { Backdrop } from './components/fx'
 import Layout from './components/Layout'
 import BusinessLayout from './components/BusinessLayout'
 import Login from './pages/Login'
@@ -19,10 +20,10 @@ import AppSettings from './pages/AppSettings'
 import MediaLibrary from './pages/MediaLibrary'
 import Profile from './pages/Profile'
 
-export default function App() {
+function Routing() {
   const { data, isLoading, error } = useQuery({ queryKey: ['session'], queryFn: () => get('/api/session/'), staleTime: 60_000 })
-  if (isLoading) return <div className="grid h-full place-items-center"><Spinner /></div>
-  if (error) return <div className="grid h-full place-items-center p-6 text-center text-red-600">Serverga ulanib bo'lmadi. Django ishlayaptimi? ({error.message})</div>
+  if (isLoading) return <div className="relative z-10 grid h-full place-items-center"><Spinner /></div>
+  if (error) return <div className="relative z-10 grid h-full place-items-center p-6 text-center text-red-600">Serverga ulanib bo'lmadi. Django ishlayaptimi? ({error.message})</div>
   if (!data.authenticated) return <Login />
   return (
     <Routes>
@@ -46,4 +47,8 @@ export default function App() {
       </Route>
     </Routes>
   )
+}
+
+export default function App() {
+  return <><Backdrop /><Routing /></>
 }

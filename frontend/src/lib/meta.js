@@ -1,6 +1,6 @@
 export const PLATFORM = {
   telegram: { label: 'Telegram', short: 'TG', color: '#229ED9', soft: '#e6f4fb' },
-  instagram: { label: 'Instagram', short: 'IG', color: '#d6249f', soft: '#fbe8f5' },
+  instagram: { label: 'Instagram', short: 'IG', color: '#d6249f', soft: '#fbe8f5', bg: 'linear-gradient(45deg,#feda75,#fa7e1e 25%,#d62976 55%,#962fbf 80%,#4f5bd5)' },
   youtube: { label: 'YouTube', short: 'YT', color: '#ef1c1c', soft: '#fde8e8' },
   facebook: { label: 'Facebook', short: 'FB', color: '#1877f2', soft: '#e7f0fe' },
   tiktok: { label: 'TikTok', short: 'TT', color: '#111827', soft: '#e5e7eb' },
@@ -45,7 +45,7 @@ export function fmtDate(iso, withTime = true) {
 }
 export const fmtNum = (n) => new Intl.NumberFormat('uz-UZ').format(n || 0).replace(/,/g, ' ')
 export const initials = (name = '') => name.trim().split(/\s+/).slice(0, 2).map((w) => w[0]?.toUpperCase() || '').join('') || '?'
-const PALETTE = ['#6366f1', '#0ea5e9', '#10b981', '#f59e0b', '#ec4899', '#8b5cf6', '#14b8a6', '#ef4444']
+const PALETTE = ['#7657ff', '#2ea9ff', '#14c8a4', '#ff9f1c', '#ff5d7d', '#a855f7', '#0fb5b0', '#f0506e']
 export const colorFor = (s = '') => PALETTE[[...s].reduce((a, c) => a + c.charCodeAt(0), 0) % PALETTE.length]
 
 export function fmtSize(b = 0) {

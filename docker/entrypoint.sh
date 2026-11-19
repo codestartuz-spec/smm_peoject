@@ -7,14 +7,16 @@ if [ "${RUN_MIGRATIONS:-1}" = "1" ]; then
   python - <<'PY'
 import os, sys, time
 import pymysql
+err = None
 for _ in range(60):
     try:
         pymysql.connect(host=os.getenv("DB_HOST", "db"), port=int(os.getenv("DB_PORT", "3306")),
                         user=os.getenv("DB_USER", "root"), password=os.getenv("DB_PASSWORD", "")).close()
         sys.exit(0)
-    except Exception:
+    except Exception as ex:
+        err = ex
         time.sleep(2)
-sys.exit("MySQL'ga ulanib bo'lmadi (DB_HOST/DB_PASSWORD ni .env da tekshiring)")
+sys.exit("MySQL'ga ulanib bo'lmadi (DB_HOST/DB_PASSWORD ni .env da tekshiring): %r" % (err,))
 PY
   python manage.py init_db
   python manage.py migrate --noinput

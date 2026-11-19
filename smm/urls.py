@@ -1,0 +1,35 @@
+from django.urls import path
+
+from . import api as a
+
+urlpatterns = [
+    path("api/session/", a.session),
+    path("api/login/", a.login_view),
+    path("api/logout/", a.logout_view),
+    path("api/businesses/", a.businesses),
+    path("api/businesses/<slug:slug>/", a.business_detail),
+    path("api/businesses/<slug:slug>/overview/", a.overview),
+    path("api/businesses/<slug:slug>/posts/", a.posts),
+    path("api/businesses/<slug:slug>/series/", a.series_list),
+    path("api/businesses/<slug:slug>/ai/plan/", a.ai_plan),
+    path("api/businesses/<slug:slug>/ai/series/", a.ai_series),
+    path("api/businesses/<slug:slug>/ai/insights/", a.ai_insights),
+    path("api/businesses/<slug:slug>/stats/", a.stats),
+    path("api/businesses/<slug:slug>/stats/refresh/", a.stats_refresh),
+    path("api/businesses/<slug:slug>/channels/", a.channels),
+    path("api/businesses/<slug:slug>/library/", a.library),
+    path("api/media/<int:pk>/", a.library_item),
+    path("api/profile/", a.profile),
+    path("api/profile/password/", a.profile_password),
+    path("api/businesses/<slug:slug>/comments/", a.comments),
+    path("api/businesses/<slug:slug>/comments/action/", a.comments_action),
+    path("api/posts/<int:pk>/", a.post_detail),
+    path("api/posts/<int:pk>/media/", a.post_media),
+    path("api/posts/<int:pk>/media/<int:mid>/", a.post_media_delete),
+    path("api/posts/<int:pk>/<str:action>/", a.post_action),
+    path("api/channels/<int:pk>/", a.channel_action),
+    path("api/channels/<int:pk>/<str:action>/", a.channel_action),
+    path("api/settings/", a.app_settings),
+    path("oauth/google/start/<int:pk>/", a.google_start, name="google_start"),
+    path("oauth/google/callback/", a.google_callback, name="google_callback"),
+]

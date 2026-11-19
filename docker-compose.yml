@@ -1,0 +1,59 @@
+# SMM Agent: web (gunicorn) + scheduler (fon ishchi) + MySQL + Cloudflare Tunnel
+# Ishga tushirish:  ./deploy.sh   (yoki qo'lda: docker compose up -d --build)
+services:
+  db:
+    image: mysql:8.4
+    restart: unless-stopped
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_DATABASE: ${DB_NAME:-smm_db}
+      TZ: Asia/Tashkent
+    volumes:
+      - db_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -uroot -p$$MYSQL_ROOT_PASSWORD --silent"]
+      interval: 10s
+      timeout: 5s
+      retries: 20
+
+  web:
+    build: .
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      - ./.env:/app/.env          # sozlamalar sahifasi shu faylni yangilaydi
+    ports:
+      - "127.0.0.1:${WEB_PORT:-8000}:8000"   # faqat serverning o'zidan; tashqariga Cloudflare Tunnel orqali chiqadi
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request;urllib.request.urlopen('http://127.0.0.1:8000/api/session/')"]
+      interval: 15s
+      timeout: 10s
+      retries: 10
+      start_period: 60s
+
+  scheduler:
+    build: .
+    restart: unless-stopped
+    command: ["python", "manage.py", "run_scheduler"]
+    environment:
+      RUN_MIGRATIONS: "0"
+    depends_on:
+      web:
+        condition: service_healthy
+    volumes:
+      - ./.env:/app/.env
+
+  cloudflared:
+    image: cloudflare/cloudflared:latest
+    restart: unless-stopped
+    command: tunnel --no-autoupdate run
+    environment:
+      TUNNEL_TOKEN: ${TUNNEL_TOKEN}
+    depends_on:
+      - web
+
+volumes:
+  db_data:

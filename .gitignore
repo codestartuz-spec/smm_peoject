@@ -1,0 +1,13 @@
+# maxfiy / mahalliy
+.env
+db.sqlite3
+media/
+staticfiles/
+_to_delete/
+# Python
+venv/
+__pycache__/
+*.pyc
+# Frontend (Docker ichida yig'iladi)
+frontend/node_modules/
+frontend/dist/

@@ -43,7 +43,7 @@ def api(methods=("GET",), auth=True):
             if auth and not request.user.is_authenticated:
                 return JsonResponse({"error": "Kirish talab qilinadi"}, status=401)
             request.data = {}
-            if request.body and (request.content_type or "").startswith("application/json"):
+            if (request.content_type or "").startswith("application/json") and request.body:
                 try:
                     request.data = json.loads(request.body)
                 except ValueError:

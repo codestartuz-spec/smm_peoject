@@ -62,7 +62,7 @@ def _anthropic(system, prompt, as_json):
         system += "\n\nJavobni faqat yaroqli JSON ko'rinishida ber, boshqa matn yozma."
     r = requests.post("https://api.anthropic.com/v1/messages", timeout=180,
                       headers={"x-api-key": key, "anthropic-version": "2023-06-01", "content-type": "application/json"},
-                      json={"model": settings.ANTHROPIC_MODEL, "max_tokens": 8192, "temperature": 0.8, "system": system,
+                      json={"model": settings.ANTHROPIC_MODEL, "max_tokens": 8192, "system": system,
                             "messages": [{"role": "user", "content": prompt}]})
     if r.status_code >= 400:
         raise AIError(f"Claude {r.status_code}: {r.text[:200]}")

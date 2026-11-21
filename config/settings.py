@@ -128,3 +128,13 @@ GOOGLE_CLIENT_ID = env("GOOGLE_CLIENT_ID")
 GOOGLE_CLIENT_SECRET = env("GOOGLE_CLIENT_SECRET")
 META_APP_ID = env("META_APP_ID")
 META_APP_SECRET = env("META_APP_SECRET")
+
+
+# Xatolar (500) tracebacki docker logs ga chiqishi uchun
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "handlers": {"console": {"class": "logging.StreamHandler"}},
+    "root": {"handlers": ["console"], "level": "INFO"},
+    "loggers": {"django.request": {"handlers": ["console"], "level": "ERROR", "propagate": False}},
+}

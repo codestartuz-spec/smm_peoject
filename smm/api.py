@@ -1,6 +1,7 @@
 """React ilova uchun JSON API. Barcha endpointlar sessiya (login) talab qiladi."""
 import functools
 import json
+import logging
 from collections import defaultdict
 from datetime import datetime, timedelta
 
@@ -8,7 +9,7 @@ import requests
 from django.conf import settings
 from django.contrib.auth import authenticate, login, logout
 from django.db.models import Count
-from django.http import HttpResponse, JsonResponse
+from django.http import Http404, HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse
 from django.utils import timezone
@@ -23,6 +24,8 @@ from .models import (PLATFORMS, POST_KINDS, POST_STATUSES, Business, Channel, Co
                      Pillar, Post, PostVariant, Series)
 from .platforms import PlatformError, get_adapter
 from .platforms.instagram import discover
+
+logger = logging.getLogger(__name__)
 
 
 class ApiError(Exception):
@@ -51,6 +54,11 @@ def api(methods=("GET",), auth=True):
                 return JsonResponse({"error": str(e)}, status=e.status)
             except (AIError, PlatformError, requests.RequestException) as e:
                 return JsonResponse({"error": str(e)}, status=400)
+            except Http404:
+                raise
+            except Exception as e:  # noqa: BLE001 — kutilmagan xato: logga yozib, aniq xabar qaytaramiz
+                logger.exception("API xatosi: %s %s", request.method, request.path)
+                return JsonResponse({"error": f"Server xatosi: {type(e).__name__}: {e}"[:400]}, status=500)
         return wrapper
     return deco
 

@@ -1,5 +1,22 @@
-# SMM Agent: web (gunicorn) + scheduler (fon ishchi) + MySQL + Cloudflare Tunnel
-# Ishga tushirish:  ./deploy.sh   (yoki qo'lda: docker compose up -d --build)
+# SMM Agent: web (gunicorn) + scheduler (fon ishchi) + MySQL [+ Cloudflare Tunnel ixtiyoriy]
+# Ishga tushirish:  docker compose up -d --build
+# Cloudflare Tunnel bilan:  docker compose --profile tunnel up -d --build   (.env da TUNNEL_TOKEN kerak)
+x-app-env: &app-env
+  SECRET_KEY: ${SECRET_KEY}
+  DEBUG: ${DEBUG:-0}
+  ALLOWED_HOSTS: ${ALLOWED_HOSTS:-*}
+  BEHIND_PROXY: ${BEHIND_PROXY:-1}
+  PUBLIC_BASE_URL: ${PUBLIC_BASE_URL:-}
+  DB_NAME: ${DB_NAME:-smm_db}
+  DB_USER: ${DB_USER:-root}
+  DB_PASSWORD: ${DB_PASSWORD}
+  DB_HOST: ${DB_HOST:-db}
+  DB_PORT: ${DB_PORT:-3306}
+  DJANGO_SUPERUSER_USERNAME: ${DJANGO_SUPERUSER_USERNAME:-admin}
+  DJANGO_SUPERUSER_PASSWORD: ${DJANGO_SUPERUSER_PASSWORD:-}
+  DJANGO_SUPERUSER_EMAIL: ${DJANGO_SUPERUSER_EMAIL:-}
+  TZ: Asia/Tashkent
+
 services:
   db:
     image: mysql:8.4
@@ -20,27 +37,27 @@ services:
   web:
     build: .
     restart: unless-stopped
-    env_file: .env
+    environment: *app-env
     depends_on:
       db:
         condition: service_healthy
     volumes:
       - ./.env:/app/.env          # sozlamalar sahifasi shu faylni yangilaydi
     ports:
-      - "127.0.0.1:${WEB_PORT:-8000}:8000"   # faqat serverning o'zidan; tashqariga Cloudflare Tunnel orqali chiqadi
+      - "${WEB_PORT:-8000}:8000"
     healthcheck:
       test: ["CMD", "python", "-c", "import urllib.request;urllib.request.urlopen('http://127.0.0.1:8000/api/session/')"]
       interval: 15s
       timeout: 10s
       retries: 10
-      start_period: 60s
+      start_period: 90s
 
   scheduler:
     build: .
     restart: unless-stopped
     command: ["python", "manage.py", "run_scheduler"]
-    env_file: .env
     environment:
+      <<: *app-env
       RUN_MIGRATIONS: "0"
     depends_on:
       web:
@@ -50,10 +67,11 @@ services:
 
   cloudflared:
     image: cloudflare/cloudflared:latest
+    profiles: ["tunnel"]
     restart: unless-stopped
     command: tunnel --no-autoupdate run
     environment:
-      TUNNEL_TOKEN: ${TUNNEL_TOKEN}
+      TUNNEL_TOKEN: ${TUNNEL_TOKEN:-}
     depends_on:
       - web
 
